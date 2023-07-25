@@ -4,7 +4,11 @@
 
 ### 1.1 存储信息
 
-订阅名`show`
+订阅名`show1`和`show2`
+
+show1控制第一辆
+
+show2控制第二辆
 
 现在有两小车
 
@@ -17,6 +21,7 @@ _id分别为`64be1c4fd6ac26e2ca6409ce`  `64be1c79d6ac26e2ca6409cf`
         {
             "_id":"64be1c4fd6ac26e2ca6409ce",
             "GPS":"(118.3E,44,6N)",
+            "RFID": "12345678",
             "V1":100,
             "V2": 50,
             "I":100,
@@ -31,7 +36,7 @@ _id分别为`64be1c4fd6ac26e2ca6409ce`  `64be1c79d6ac26e2ca6409cf`
 
 ### 1.2控制硬件
 
-订阅名`cont`
+订阅名`cont1`和`cont2`
 
 ```json
 {
@@ -39,19 +44,8 @@ _id分别为`64be1c4fd6ac26e2ca6409ce`  `64be1c79d6ac26e2ca6409cf`
     "data":[
         {
         	"_id": "64be1c4fd6ac26e2ca6409ce",
-            "open1":"0/1",
-        }
-    ]
-}
-
-
-
-{
-    "status":"ok",
-    "data":[
-        {
-        	"_id": "64be1c4fd6ac26e2ca6409ce",
-            "open2":"0/1",
+            "openswitch":"0/1",
+            "opentrumpet":"0/1"
         }
     ]
 }
@@ -59,7 +53,7 @@ _id分别为`64be1c4fd6ac26e2ca6409ce`  `64be1c79d6ac26e2ca6409cf`
 
 分别控制电动车开关,控制喇叭开关
 
-后端会一直给硬件发送这个订阅
+后端会一直给cont1和cont2订阅发送
 
 ```json
 {"status":"ok"};
@@ -141,19 +135,19 @@ res.status(200).json({
     "msg": "success",
     "result": [
         {
-            "_id": "64be1c4fd6ac26e2ca6409ce",
-            "id": 1,
+            "_id": "64bf73e313ed8f53e88371d8",
             "GPS": "(118.3E,44,6N)",
+            "RFID": "12345678",
             "V1": 100,
             "V2": 50,
             "I": 100,
             "T": 100,
-            "speed": 100
+            "speed": 30
         },
         {
-            "_id": "64be1c79d6ac26e2ca6409cf",
-            "id": 2,
+            "_id": "64bf741213ed8f53e88371d9",
             "GPS": "(118.3E,44,6N)",
+            "RFID": "12345678",
             "V1": 27.5,
             "V2": 20,
             "I": 10,

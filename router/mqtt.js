@@ -8,7 +8,7 @@ const router = express.Router();
 
 let mqttclient = new Mqtt({
   url: 'mqtt://localhost:1883',
-  theme: [`shdsaveok`, `show`, `cont`],
+  theme: [`shdsaveok`, `show1`, `show2`, `cont1`, `cont2`],
   handleData: (message, topic) => {
     if (message) {
       var res;
@@ -20,7 +20,9 @@ let mqttclient = new Mqtt({
       if (res.data === undefined || res.data === null || res.data.length <= 0)
         return;
       switch (topic) {
-        case 'show':
+        case 'show1':
+          save(res.data[0]);
+        case 'show2':
           save(res.data[0]);
           break;
         default:
@@ -34,7 +36,8 @@ mqttclient.conn();
 // 发布订阅消息函数
 const publishMessage = () => {
   const message = JSON.stringify({ status: 'ok' });
-  mqttclient.publish('cont', message);
+  mqttclient.publish('cont1', message);
+  mqttclient.publish('cont2', message);
   console.log(`已发布订阅消息: ${message}`);
 };
 
