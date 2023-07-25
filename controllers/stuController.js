@@ -26,8 +26,6 @@ exports.getData = catchAsync(async (req, res, next) => {
     return new AppError('please tell me which form you need', 404);
   }
   const collection = req.query.msg;
-  console.log(collection);
-
   let result;
   if (collection == 'User') {
     result = await User.find();

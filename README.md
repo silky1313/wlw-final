@@ -17,7 +17,8 @@ _id分别为`64be1c4fd6ac26e2ca6409ce`  `64be1c79d6ac26e2ca6409cf`
         {
             "_id":"64be1c4fd6ac26e2ca6409ce",
             "GPS":"(118.3E,44,6N)",
-            "V":100,
+            "V1":100,
+            "V2": 50,
             "I":100,
             "T":100,
             "speed":100
@@ -32,13 +33,25 @@ _id分别为`64be1c4fd6ac26e2ca6409ce`  `64be1c79d6ac26e2ca6409cf`
 
 订阅名`cont`
 
-```
+```json
 {
     "status":"ok",
     "data":[
         {
+        	"_id": "64be1c4fd6ac26e2ca6409ce",
             "open1":"0/1",
-            "open2":"0/1"
+        }
+    ]
+}
+
+
+
+{
+    "status":"ok",
+    "data":[
+        {
+        	"_id": "64be1c4fd6ac26e2ca6409ce",
+            "open2":"0/1",
         }
     ]
 }
@@ -88,7 +101,7 @@ const sendErrorDev = (err, res) => {
 
 request:
 
-```
+```json
 {
     "username": "admin",
     "password": "123456"
@@ -131,7 +144,8 @@ res.status(200).json({
             "_id": "64be1c4fd6ac26e2ca6409ce",
             "id": 1,
             "GPS": "(118.3E,44,6N)",
-            "V": 100,
+            "V1": 100,
+            "V2": 50,
             "I": 100,
             "T": 100,
             "speed": 100
@@ -140,7 +154,8 @@ res.status(200).json({
             "_id": "64be1c79d6ac26e2ca6409cf",
             "id": 2,
             "GPS": "(118.3E,44,6N)",
-            "V": 27.5,
+            "V1": 27.5,
+            "V2": 20,
             "I": 10,
             "T": 30,
             "speed": 30

@@ -39,11 +39,10 @@ const publishMessage = () => {
 };
 
 // 每隔三秒发布订阅消息
-setInterval(publishMessage, 3000);
+//setInterval(publishMessage, 3000);
 
 const save = catchAsync(async data => {
   const { _id, ...updateData } = data;
-  console.log(_id);
   const newBike = await Bike.findByIdAndUpdate(_id, updateData, {
     new: true,
     runValidators: true
