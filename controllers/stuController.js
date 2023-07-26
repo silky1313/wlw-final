@@ -25,13 +25,17 @@ exports.getData = catchAsync(async (req, res, next) => {
   if (!req.query.msg) {
     return new AppError('please tell me which form you need', 404);
   }
+  const collections = {
+    User: User,
+    Bike: Bike
+    // 可以添加更多的集合名称和对应的模型
+  };
   const collection = req.query.msg;
-  let result;
-  if (collection == 'User') {
-    result = await User.find();
-  } else if (collection === 'Bike') {
-    result = await Bike.find();
+  const Model = collections[collection];
+  if (!Model) {
+    return new AppError('invalid collection name', 400);
   }
+  const result = await Model.find();
   res.status(200).json({
     code: 200,
     msg: 'success',

@@ -13,6 +13,10 @@ const bikeSchema = new mongoose.Schema({
     type: String,
     require: [true, 'please give me your GPS']
   },
+  date: {
+    type: String,
+    require: [true, 'please give me your date']
+  },
   RFID: {
     type: String,
     require: [true, 'please give me your RFID']

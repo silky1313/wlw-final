@@ -12,14 +12,15 @@ show2控制第二辆
 
 现在有两小车
 
-_id分别为`64be1c4fd6ac26e2ca6409ce`  `64be1c79d6ac26e2ca6409cf`
+_id分别为`64bf741213ed8f53e88371d9`  `64bf73e313ed8f53e88371d8`
 
 ```json
 {
     "status":"ok",
     "data":[
         {
-            "_id":"64be1c4fd6ac26e2ca6409ce",
+            "_id":"64bf73e313ed8f53e88371d8",
+            "date": "2023-08-26T12:12:12",
             "GPS":"(118.3E,44,6N)",
             "RFID": "12345678",
             "V1":100,
@@ -43,7 +44,7 @@ _id分别为`64be1c4fd6ac26e2ca6409ce`  `64be1c79d6ac26e2ca6409cf`
     "status":"ok",
     "data":[
         {
-        	"_id": "64be1c4fd6ac26e2ca6409ce",
+            "_id": "64be1c4fd6ac26e2ca6409ce",
             "openswitch":"0/1",
             "opentrumpet":"0/1"
         }
@@ -56,7 +57,10 @@ _id分别为`64be1c4fd6ac26e2ca6409ce`  `64be1c79d6ac26e2ca6409cf`
 后端会一直给cont1和cont2订阅发送
 
 ```json
-{"status":"ok"};
+{
+    "status":"ok",
+    "data": "2023-7-26T12:12:12"
+};
 ```
 
 ## 2.路由相关
@@ -127,7 +131,7 @@ res.status(200).json({
 
 现在数据库有两个表User和Bike
 
-这是bike
+这是Bike
 
 ```json
 {

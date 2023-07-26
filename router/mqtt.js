@@ -4,6 +4,7 @@ const Bike = require('../models/bikeModel');
 const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
 const mongoose = require('mongoose');
+const moment = require('moment');
 const router = express.Router();
 
 let mqttclient = new Mqtt({
@@ -22,6 +23,7 @@ let mqttclient = new Mqtt({
       switch (topic) {
         case 'show1':
           save(res.data[0]);
+          break;
         case 'show2':
           save(res.data[0]);
           break;
@@ -46,15 +48,19 @@ const publishMessage = () => {
 
 const save = catchAsync(async data => {
   const { _id, ...updateData } = data;
-  const newBike = await Bike.findByIdAndUpdate(_id, updateData, {
+  if (!_id || !updateData) {
+    return console.log('单车信息包发生缺失');
+  }
+  const query = { _id, date: { $lt: updateData.date } };
+  const oldBike = await Bike.findByIdAndUpdate(query, updateData, {
     new: true,
     runValidators: true
   });
-  if (!newBike) {
-    console.log(`小车${_id}信息保存失败`);
-  } else {
-    console.log(newBike);
+
+  if (oldBike) {
     console.log(`小车${_id}信息保存成功`);
+  } else {
+    console.log('单车信息过旧,小车信息保存失败');
   }
 });
 
