@@ -1,6 +1,7 @@
 const Mqtt = require('../utils/mqtt.js');
 const express = require('express');
 const Bike = require('../models/bikeModel');
+const Hbike = require('../models/HbikeModel');
 const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
 const mongoose = require('mongoose');
@@ -20,12 +21,15 @@ let mqttclient = new Mqtt({
       } //非JSON数据不予处理
       if (res.data === undefined || res.data === null || res.data.length <= 0)
         return;
+      const message1 = JSON.stringify({ status: 'ok' });
       switch (topic) {
         case 'show1':
           save(res.data[0]);
+          mqttclient.publish('cont1', message1);
           break;
         case 'show2':
           save(res.data[0]);
+          mqttclient.publish('cont2', message1);
           break;
         default:
           return;
@@ -47,18 +51,25 @@ const publishMessage = () => {
 //setInterval(publishMessage, 3000);
 
 const save = catchAsync(async data => {
+  //1) 现判断信息是否发生缺失
   const { _id, ...updateData } = data;
-  if (!_id || !updateData) {
+  if (!_id || Object.keys(updateData).length != 8) {
     return console.log('单车信息包发生缺失');
   }
-  const query = { _id, date: { $lt: updateData.date } };
-  const oldBike = await Bike.findByIdAndUpdate(query, updateData, {
-    new: true,
-    runValidators: true
-  });
 
-  if (oldBike) {
-    console.log(`小车${_id}信息保存成功`);
+  //2) 保存历史数据
+  const history = await Hbike.create({ bike: data });
+  if (!history) {
+    console.log('历史数据保存失败');
+  }
+
+  //3)更新Bike collection
+  const oldBike = await Bike.findById(_id);
+  if (oldBike.date < updateData.date) {
+    const newBike = await Bike.updateOne({ _id }, updateData);
+    if (newBike) {
+      console.log(`小车${_id}信息保存成功`);
+    }
   } else {
     console.log('单车信息过旧,小车信息保存失败');
   }
