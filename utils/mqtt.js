@@ -73,9 +73,8 @@ const Mqtt = function(params) {
       },
       error => {
         if (!error) {
+          //console.log(jsonData);
         }
-        log4js.debug(jsonData);
-        log4js.debug(error || '发布成功');
       }
     );
   };

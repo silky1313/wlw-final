@@ -1,18 +1,20 @@
 const express = require('express');
-//log middleware
 const morgan = require('morgan');
-//处理错误的控制器
 const globalErrorHandler = require('./controllers/errorController');
-//错误类
 const AppError = require('./utils/appError');
-//引进路由
 const stuRouter = require('./router/stuRoutes');
-const userRouter = require('./router/userRoutes');
-
-//连接mqtt服务器
 const mqtt = require('./router/mqtt');
 const querystring = require('querystring');
+const ejs = require('ejs');
 const app = express();
+const path = require('path');
+
+app.use(express.static(path.join(__dirname, 'public')));
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+app.get('/readme', (req, res) => {
+  res.render('README');
+});
 
 // 1) 配置生产环境和开发环境
 if (process.env.NODE_ENV === 'development') {

@@ -1,27 +1,29 @@
 const mongoose = require('mongoose');
 
-/*
-"_id":,
-"GPS":"(118.3E,44,6N)",
-"V":27.5,
-"I":10,
-"T":30,
-"speed":30
-*/
 const HbikeSchema = new mongoose.Schema({
   id: String,
-  //temp
+  //温度
   t: String,
-  //light
+  //亮度
   l: String,
-  //status
+  //灯光状态
   s: String,
-  //amount
+  //人口数量
   a: String,
-  //data
-  date: String
+  //加热器是否打开
+  h: String,
+  //当前数据的时间
+  date: String,
+  //时间区间
+  dl: String,
+  dr: String,
+  //亮度区间
+  ll: String,
+  lr: String,
+  //温度区间
+  tl: String,
+  tr: String
 });
 
-HbikeSchema.index({ id: -1 });
 const Hbike = mongoose.model('HBike', HbikeSchema);
 module.exports = Hbike;

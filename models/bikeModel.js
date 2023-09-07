@@ -1,22 +1,28 @@
 const mongoose = require('mongoose');
 
-/*
-"_id":,
-"GPS":"(118.3E,44,6N)",
-"V":27.5,
-"I":10,
-"T":30,
-"speed":30
-*/
 const bikeSchema = new mongoose.Schema({
   id: String,
+  //温度
   t: String,
+  //亮度
   l: String,
+  //灯光状态
   s: String,
+  //人口数量
   a: String,
+  //加热器是否打开
+  h: String,
+  //当前数据的时间
   date: String,
-  min: String,
-  max: String
+  //时间区间
+  dl: String,
+  dr: String,
+  //亮度区间
+  ll: String,
+  lr: String,
+  //温度区间
+  tl: String,
+  tr: String
 });
 
 const Bike = mongoose.model('Bike', bikeSchema);

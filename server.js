@@ -9,10 +9,10 @@ mongoose
     useNewUrlParser: true
   })
   .then(con => {
-    //console.log('DB connection successful');
+    console.log('DB connection successful');
   });
 
 const port = 8008;
 module.exports = app.listen(port, () => {
-  //console.log(`App running on port ${port}...`);
+  console.log(`App running on port ${port}...`);
 });

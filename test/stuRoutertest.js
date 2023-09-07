@@ -1,6 +1,7 @@
 var request = require('supertest');
 var server = require('../server');
 const { expect } = require('chai');
+let mqttclient = require('../router/mqtt');
 
 describe('GET /stu/v1', function() {
   describe('GET /stu/v1/data', function() {
@@ -26,3 +27,18 @@ describe('GET /stu/v1', function() {
     });
   });
 });
+
+// describe('test mqtt', function() {
+//   it('respond with a room status', function(done) {
+//     const pool = {
+//       status: 'ok',
+//       data: [
+//         {
+//           n: '1'
+//         }
+//       ]
+//     };
+//     mqttclient.publish('pool', pool);
+
+//   });
+// });
