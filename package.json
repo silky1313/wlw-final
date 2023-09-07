@@ -6,20 +6,24 @@
   "scripts": {
     "start": "nodemon ./server.js",
     "start:prod": "set NODE_ENV=production&& nodemon server.js",
-    "debug": "ndb server.js"
+    "debug": "ndb server.js",
+    "test": "mocha ./test/stuRoutertest"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.20.2",
+    "chai": "^4.3.8",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "format": "^0.2.2",
+    "mocha": "^10.2.0",
     "moment": "^2.29.4",
     "mongoose": "^7.4.0",
     "morgan": "^1.10.0",
     "mqtt": "^4.3.7",
-    "slugify": "^1.6.6"
+    "slugify": "^1.6.6",
+    "supertest": "^6.3.3"
   },
   "devDependencies": {
     "eslint": "^5.16.0",

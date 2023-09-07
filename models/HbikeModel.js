@@ -9,11 +9,19 @@ const mongoose = require('mongoose');
 "speed":30
 */
 const HbikeSchema = new mongoose.Schema({
-  bike: {
-    type: mongoose.Schema.Types.Mixed,
-    required: true
-  }
+  id: String,
+  //temp
+  t: String,
+  //light
+  l: String,
+  //status
+  s: String,
+  //amount
+  a: String,
+  //data
+  date: String
 });
 
+HbikeSchema.index({ id: -1 });
 const Hbike = mongoose.model('HBike', HbikeSchema);
 module.exports = Hbike;

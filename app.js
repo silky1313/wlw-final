@@ -6,8 +6,9 @@ const globalErrorHandler = require('./controllers/errorController');
 //错误类
 const AppError = require('./utils/appError');
 //引进路由
-const userRouter = require('./router/stuRoutes');
-const testRouter = require('./router/testRoutes');
+const stuRouter = require('./router/stuRoutes');
+const userRouter = require('./router/userRoutes');
+
 //连接mqtt服务器
 const mqtt = require('./router/mqtt');
 const querystring = require('querystring');
@@ -46,8 +47,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 // 4) 设置路由
-app.use('/stu/v1', userRouter);
-app.use('/stu/v1/test', testRouter);
+app.use('/stu/v1', stuRouter);
+//app.use('/user/v1', userRouter);
+
 // 5) 连接mqtt服务器
 //app.use('/mqtt', mqtt);
 

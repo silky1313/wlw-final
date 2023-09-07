@@ -1,15 +1,10 @@
 const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
-  username: {
-    type: String,
-    require: [true, 'please give me your username']
-  },
-  password: {
-    type: String,
-    require: [true, 'please give me your password'],
-    select: false
-  }
+  username: { type: String }, //用户账号
+  userpwd: { type: String }, //密码
+  userage: { type: Number }, //年龄
+  logindate: { type: Date }
 });
 
 const User = mongoose.model('User', userSchema);

@@ -9,38 +9,17 @@ const mongoose = require('mongoose');
 "speed":30
 */
 const bikeSchema = new mongoose.Schema({
-  GPS: {
-    type: String,
-    require: [true, 'please give me your GPS']
-  },
-  date: {
-    type: String,
-    require: [true, 'please give me your date']
-  },
-  RFID: {
-    type: String,
-    require: [true, 'please give me your RFID']
-  },
-  V1: {
-    type: Number,
-    require: [true, 'please give me your V1']
-  },
-  V2: {
-    type: Number,
-    require: [true, 'please give me your V2']
-  },
-  I: {
-    type: Number,
-    require: [true, 'please give me your I']
-  },
-  T: {
-    type: Number,
-    require: [true, 'please give me your T']
-  },
-  speed: {
-    type: Number,
-    require: [true, 'please give me your speed']
-  }
+  id: String,
+  //temp
+  t: String,
+  //light
+  l: String,
+  //status
+  s: String,
+  //amount
+  a: String,
+  //data
+  date: String
 });
 
 const Bike = mongoose.model('Bike', bikeSchema);

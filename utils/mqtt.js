@@ -23,7 +23,7 @@ const Mqtt = function(params) {
     });
   }
 
-  console.log(options.clientId);
+  //console.log(options.clientId);
   this.client = this.mqtt.connect(params.url || process.env.MQTT_URL, options);
 
   // 重连次数 超10次就算了
@@ -39,9 +39,9 @@ const Mqtt = function(params) {
           qos: 1
         },
         () => {
-          console.log(
-            params.theme.join('----分割线----') + '----分割线----订阅成功'
-          );
+          // console.log(
+          //   params.theme.join('----分割线----') + '----分割线----订阅成功'
+          // );
         }
       );
     });
@@ -74,6 +74,7 @@ const Mqtt = function(params) {
       error => {
         if (!error) {
         }
+        console.log(jsonData);
         console.log(error || '发布成功');
       }
     );
