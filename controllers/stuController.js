@@ -1,10 +1,9 @@
-const User = require('../models/userModel');
 const Bike = require('../models/bikeModel');
 const Hbike = require('../models/HbikeModel');
 const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
-const mongoose = require('mongoose');
 const mqttclient = require('../router/mqtt');
+const log4js = require('../mylog4js.js').getLogger('stuRoutes');
 
 exports.getData = catchAsync(async (req, res, next) => {
   if (!req.query.msg) {
@@ -13,7 +12,6 @@ exports.getData = catchAsync(async (req, res, next) => {
   const collections = {
     Bike: Bike,
     Hbike: Hbike
-    // 可以添加更多的集合名称和对应的模型
   };
 
   const collection = req.query.msg;
@@ -23,6 +21,7 @@ exports.getData = catchAsync(async (req, res, next) => {
   }
   const result = await Model.find();
 
+  log4js.debug(req.query.msg, result.length);
   res.status(200).json({
     code: 200,
     msg: 'success',
@@ -37,8 +36,10 @@ exports.updateData = catchAsync(async (req, res, next) => {
     status: 'ok',
     data: [change]
   };
+
   result = await Bike.find({ id: '2001' });
 
+  log4js.debug(cont);
   mqttclient.publish('cont', cont);
   res.status(200).json({
     code: 200,

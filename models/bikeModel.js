@@ -10,16 +10,13 @@ const mongoose = require('mongoose');
 */
 const bikeSchema = new mongoose.Schema({
   id: String,
-  //temp
   t: String,
-  //light
   l: String,
-  //status
   s: String,
-  //amount
   a: String,
-  //data
-  date: String
+  date: String,
+  min: String,
+  max: String
 });
 
 const Bike = mongoose.model('Bike', bikeSchema);

@@ -1,5 +1,5 @@
 const mqtt_module = require('mqtt');
-
+const log4js = require('../mylog4js.js').getLogger('mqtt');
 //主要是为了连接mqtt服务器
 const Mqtt = function(params) {
   this.mqtt = mqtt_module;
@@ -39,9 +39,9 @@ const Mqtt = function(params) {
           qos: 1
         },
         () => {
-          // console.log(
-          //   params.theme.join('----分割线----') + '----分割线----订阅成功'
-          // );
+          console.log(
+            params.theme.join('----分割线----') + '----分割线----订阅成功'
+          );
         }
       );
     });
@@ -74,8 +74,8 @@ const Mqtt = function(params) {
       error => {
         if (!error) {
         }
-        console.log(jsonData);
-        console.log(error || '发布成功');
+        log4js.debug(jsonData);
+        log4js.debug(error || '发布成功');
       }
     );
   };
