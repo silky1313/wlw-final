@@ -6,7 +6,9 @@ const User = require('../models/userModel.js');
 const catchAsync = require('../utils/catchAsync');
 const log4js = require('../mylog4js.js').getLogger('mqtt');
 const iconv = require('../utils/GB2023');
+const Update = require('../models/updateModel');
 
+let latesTime = null;
 let mqttclient = new Mqtt({
   url: 'mqtt://localhost:1883',
   theme: [`shdsaveok`, `show`, `cont`],
@@ -18,12 +20,13 @@ let mqttclient = new Mqtt({
       } catch (e) {
         return;
       } //非JSON数据不予处理
-      if (res.data === undefined || res.data === null || res.data.length <= 0)
-        return;
+      if (res.data === undefined || res.data === null || res.data.length <= 0) return;
 
       switch (topic) {
         case 'show':
           save(res.data[0]);
+          //TODO:回消息
+          testConnWare();
           break;
         default:
           return;
@@ -39,8 +42,14 @@ function testConnWare() {
   };
   mqttclient.publish('cont', msg);
 }
-setInterval(testConnWare, 3000);
+//setInterval(testConnWare, 3000);
 
+/*
+  if (!oldBike) {
+    await Bike.create(data);
+    return;
+  }
+ */
 const save = catchAsync(async data => {
   const HHMMSS = moment()
     .format('HHmmss')
@@ -50,31 +59,33 @@ const save = catchAsync(async data => {
     .toString();
   const id = '2001';
   const oldBike = await Bike.findOne({ id: id });
-  data.date = YYMMDD + 'T' + data.date;
+
+  if (data.date !== undefined) {
+    data.date = YYMMDD + 'T' + data.date;
+    latesTime = data.date;
+  }
   data.id = id;
-  // if (!oldBike) {
-  //   await Bike.create(data);
-  //   return;
-  // }
-  //1) 断电后同步数据 test ok
-  console.log(data);
+
+  //1) 断电后同步数据
   if (data.n === '1') {
-    const contMessage = {
+    let contMessage = {
       status: 'ok',
       data: [
         {
           date: HHMMSS
-          // dl: oldBike.dl,
-          // dr: oldBike.dr,
-          // ll: oldBike.ll,
-          // lr: oldBike.lr,
-          // tl: oldBike.tl,
-          // tr: oldBike.tr,
-          // s: oldBike.s,
-          // h: oldBike.h
         }
       ]
     };
+
+    let result = await Update.find({}, { __v: 0, _id: 0 }).sort({ date: -1 });
+    for (let i = 0; i < result.length; i++) {
+      if (latesTime === null || latesTime < result[i].date) {
+        let {
+          _doc: { date, ...sonCont }
+        } = result[i];
+        contMessage.data[0] = { ...sonCont, ...contMessage.data[0] };
+      }
+    }
     mqttclient.publish('cont', contMessage);
     return;
   }
@@ -88,7 +99,6 @@ const save = catchAsync(async data => {
     console.log('更新成功');
   } else {
     console.log('更新失败: ');
-    console.log(data);
   }
 });
 

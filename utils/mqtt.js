@@ -11,7 +11,7 @@ const Mqtt = function(params) {
   }
   outTradeNo = parseInt(new Date().getTime() / 1000) + outTradeNo;
   let options = {
-    clientId: 'shd' + outTradeNo,
+    clientId: 'silky' + outTradeNo,
     username: 'admin',
     password: 'public'
   };
@@ -39,9 +39,7 @@ const Mqtt = function(params) {
           qos: 1
         },
         () => {
-          console.log(
-            params.theme.join('----分割线----') + '----分割线----订阅成功'
-          );
+          console.log(params.theme.join('----分割线----') + '----分割线----订阅成功');
         }
       );
     });

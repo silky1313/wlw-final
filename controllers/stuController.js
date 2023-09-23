@@ -8,12 +8,19 @@ const log4js = require('../mylog4js.js').getLogger('stuRoutes');
 const iconv = require('../utils/GB2023');
 const path = require('path');
 const ejs = require('ejs');
+const moment = require('moment');
+const Update = require('../models/updateModel');
 
 const collections = {
   Bike: Bike,
   Hbike: Hbike
 };
 
+/**
+ * 限制只取一些字段可以
+ * result = await Model.find({}, { date: 1 });
+ * 这就是只取date
+ */
 exports.getData = catchAsync(async (req, res, next) => {
   const collection = req.query.msg;
   const Model = collections[collection];
@@ -22,8 +29,8 @@ exports.getData = catchAsync(async (req, res, next) => {
   if (!req.query.msg || !Model) {
     return new AppError('please tell me which form you need', 404);
   }
+
   result = await Model.find();
-  console.log(req.query);
   res.status(200).json({
     code: 200,
     msg: 'success',
@@ -33,21 +40,21 @@ exports.getData = catchAsync(async (req, res, next) => {
 });
 
 exports.updateData = catchAsync(async (req, res, next) => {
-  let result = await Bike.updateOne({ id: '2001' }, req.query, {
-    new: true
-  });
-
+  req.query.date = moment()
+    .format('YYYY-MM-DDTHH:mm:ss')
+    .toString();
+  let result = await Update.create(req.query);
   // if (req.query.r) {
   //   req.query.r = iconv.convertToGB2312(req.query.r);
   // }
+  const { date, ...msg } = req.query;
   let cont = {
     status: 'ok',
-    data: [req.query]
+    data: [msg]
   };
+  console.log(msg);
 
-  result = await Bike.find({ id: '2001' });
   mqttclient.publish('cont', cont);
-  console.log(req.query);
   res.status(200).json({
     code: 200,
     msg: 'success',
