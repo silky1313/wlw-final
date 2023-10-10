@@ -1,6 +1,4 @@
 const Bike = require('../models/bikeModel');
-const Hbike = require('../models/HbikeModel');
-const User = require('../models/userModel');
 const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
 const mqttclient = require('../router/mqtt');
@@ -9,11 +7,18 @@ const iconv = require('../utils/GB2023');
 const path = require('path');
 const ejs = require('ejs');
 const moment = require('moment');
+const Hbike = require('../models/HbikeModel');
 const Update = require('../models/updateModel');
+const people = require('../models/people.js');
+const light = require('../models/light');
+const temp = require('../models/temp');
+const cl = require('../models/cl');
+const cf = require('../models/cf');
 
 const collections = {
   Bike: Bike,
-  Hbike: Hbike
+  Hbike: Hbike,
+  Update: Update
 };
 
 /**
@@ -30,7 +35,12 @@ exports.getData = catchAsync(async (req, res, next) => {
     return new AppError('please tell me which form you need', 404);
   }
 
-  result = await Model.find();
+  if (Model === Hbike) {
+    //查找历史数据建表
+    result = await Model.find({}, { date: 1, p: 1, t: 1 }).sort({ date: -1 });    
+  } else {
+    result = await Model.find();
+  }
   res.status(200).json({
     code: 200,
     msg: 'success',
@@ -43,7 +53,9 @@ exports.updateData = catchAsync(async (req, res, next) => {
   req.query.date = moment()
     .format('YYYY-MM-DDTHH:mm:ss')
     .toString();
+
   let result = await Update.create(req.query);
+
   // if (req.query.r) {
   //   req.query.r = iconv.convertToGB2312(req.query.r);
   // }
@@ -53,8 +65,8 @@ exports.updateData = catchAsync(async (req, res, next) => {
     data: [msg]
   };
   console.log(msg);
-
   mqttclient.publish('cont', cont);
+
   res.status(200).json({
     code: 200,
     msg: 'success',
@@ -64,6 +76,12 @@ exports.updateData = catchAsync(async (req, res, next) => {
 
 exports.deleteAll = catchAsync(async (req, res, next) => {
   await Hbike.deleteMany();
+  await Update.deleteMany();
+  await people.deleteMany();
+  await light.deleteMany();
+  await temp.deleteMany();
+  await cl.deleteMany();
+  await cf.deleteMany();
 
   res.status(200).json({
     code: 204,
