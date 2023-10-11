@@ -5,7 +5,7 @@ let mqttclient = require('../router/mqtt');
 
 describe('GET /stu/v1', function() {
   describe('GET /stu/v1/data', function() {
-    it('respond with a room status', function(done) {
+    it('respond with a room status', function(done) { 
       request(server)
         .get('/stu/v1/data?msg=Bike')
         .expect(200)

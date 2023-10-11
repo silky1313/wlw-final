@@ -14,6 +14,7 @@ const light = require('../models/light');
 const temp = require('../models/temp');
 const cl = require('../models/cl');
 const cf = require('../models/cf');
+const money = require('../models/money');
 
 const collections = {
   Bike: Bike,
@@ -37,7 +38,7 @@ exports.getData = catchAsync(async (req, res, next) => {
 
   if (Model === Hbike) {
     //查找历史数据建表
-    result = await Model.find({}, { date: 1, p: 1, t: 1 }).sort({ date: -1 });    
+    result = await Model.find({}, { date: 1, m: 1, t: 1 }).sort({ date: -1 });
   } else {
     result = await Model.find();
   }
@@ -53,7 +54,12 @@ exports.updateData = catchAsync(async (req, res, next) => {
   req.query.date = moment()
     .format('YYYY-MM-DDTHH:mm:ss')
     .toString();
-
+  if (req.query.dl) {
+    req.query.dl += '00';
+  }
+  if (req.query.dr) {
+    req.query.dr += '00';
+  }
   let result = await Update.create(req.query);
 
   // if (req.query.r) {
@@ -82,6 +88,7 @@ exports.deleteAll = catchAsync(async (req, res, next) => {
   await temp.deleteMany();
   await cl.deleteMany();
   await cf.deleteMany();
+  await money.deleteMany();
 
   res.status(200).json({
     code: 204,

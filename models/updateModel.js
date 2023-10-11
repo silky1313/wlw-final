@@ -5,6 +5,9 @@ const updateSchema = new mongoose.Schema({
   cf: String,
   //小灯状态 00 -11
   cl: String,
+  //非法时间段
+  dl: String,
+  dr: String,
   //温度范围
   tl: String,
   tr: String,
