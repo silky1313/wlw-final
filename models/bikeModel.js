@@ -23,6 +23,7 @@ const bikeSchema = new mongoose.Schema({
   //亮度范围
   ll: String,
   lr: String,
+  w: String,
   date: String
 });
 

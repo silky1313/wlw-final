@@ -23,6 +23,8 @@ const HbikeSchema = new mongoose.Schema({
   //亮度范围
   ll: String,
   lr: String,
+  //是否断网
+  w: String,
   date: String
 });
 
