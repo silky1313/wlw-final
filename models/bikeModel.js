@@ -2,13 +2,13 @@ const mongoose = require('mongoose');
 
 const bikeSchema = new mongoose.Schema({
   id: String,
-  //人员数量信息
+  //站台内人数
   p: String,
   //温度
   t: String,
   //光线亮度
   l: String,
-  //总营业额
+  //乘车总人数
   m: String,
   //风扇状态 00 - 11
   cf: String,

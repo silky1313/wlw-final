@@ -14,7 +14,7 @@ const light = require('../models/light');
 const temp = require('../models/temp');
 const cl = require('../models/cl');
 const cf = require('../models/cf');
-const money = require('../models/money');
+const amount = require('../models/amount');
 
 const collections = {
   Bike: Bike,
@@ -27,6 +27,7 @@ const collections = {
  * result = await Model.find({}, { date: 1 });
  * 这就是只取date
  */
+
 exports.getData = catchAsync(async (req, res, next) => {
   const collection = req.query.msg;
   const Model = collections[collection];
@@ -38,7 +39,7 @@ exports.getData = catchAsync(async (req, res, next) => {
 
   if (Model === Hbike) {
     //查找历史数据建表
-    result = await Model.find({}, { date: 1, m: 1, t: 1 }).sort({ date: -1 });
+    result = await Model.find({}, { date: 1, p: 1, t: 1 }).sort({ date: -1 });
   } else {
     result = await Model.find();
   }
@@ -88,8 +89,9 @@ exports.deleteAll = catchAsync(async (req, res, next) => {
   await temp.deleteMany();
   await cl.deleteMany();
   await cf.deleteMany();
-  await money.deleteMany();
+  await amount.deleteMany();
 
+  console.log('delete success');
   res.status(200).json({
     code: 204,
     msg: 'success'

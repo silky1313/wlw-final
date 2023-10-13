@@ -9,7 +9,7 @@ const Update = require('../models/updateModel');
 const people = require('../models/people.js');
 const light = require('../models/light');
 const temp = require('../models/temp');
-const money = require('../models/money');
+const amount = require('../models/amount.js');
 const cl = require('../models/cl');
 const cf = require('../models/cf');
 
@@ -41,10 +41,7 @@ mqttclient.conn();
 //setInterval(testConnWare, 3000);
 
 /*
-  if (!oldBike) {
-    await Bike.create(data);
-    return;
-  }
+  
  */
 const save = catchAsync(async data => {
   const HHMMSS = moment()
@@ -55,42 +52,41 @@ const save = catchAsync(async data => {
     .toString();
   const id = '2001';
   const oldBike = await Bike.findOne({ id: id });
-  let latesTime = oldBike.date;
   data.id = id;
   data.date = YYMMDD + 'T' + data.date;
+  //0)TODO:对象不存在创建对象。
+  if (!oldBike) {
+    await Bike.create(data);
+    return;
+  }
 
-  //2) 断电后同步数据 n===1之前是历史数据 延迟更新
+  //1)TODO:断电后同步数据, 延迟更新
   if (data.n === '1') {
-    let result = await Update.find({}, { __v: 0, _id: 0 }).sort({ date: -1 });
+    let latesTime = oldBike.date;
+    let result = await Update.find({}, { __v: 0, _id: 0 }).sort({ date: 1 });
     let i = 0;
+    let contMessage = {
+      status: 'ok',
+      data: []
+    };
+
     const interval = setInterval(() => {
       if (i >= result.length) {
         clearInterval(interval); // 当循环结束后，停止执行
         return;
       }
 
-      if (latesTime === null || latesTime < result[i].date) {
+      if (latesTime === null || latesTime <= result[i].date) {
         let {
           _doc: { date, ...sonCont }
         } = result[i];
-        let contMessage = {
-          status: 'ok',
-          data: []
-        };
         contMessage.data[0] = { ...sonCont };
         console.log(contMessage);
         mqttclient.publish('cont', contMessage);
       }
       i++;
     }, 700);
-    let contMessage = {
-      status: 'ok',
-      data: [
-        {
-          date: HHMMSS
-        }
-      ]
-    };
+    contMessage.data[0] = { date: HHMMSS };
     mqttclient.publish('cont', contMessage);
     return;
   }
@@ -107,7 +103,7 @@ const save = catchAsync(async data => {
     await light.create({ l: data.l, date: data.date });
   }
   if (data.m) {
-    await money.create({ m: data.m, date: data.date });
+    await amount.create({ m: data.m, date: data.date });
   }
   if (data.cl) {
     await cl.create({ cl: data.cl, date: data.date });
@@ -116,14 +112,12 @@ const save = catchAsync(async data => {
     await cf.create({ cf: data.cf, date: data.date });
   }
 
-  //4)TODO:更新Bike
-  //历史数据不更新
+  //4)TODO:更新Bike h === 1历史数据不更新
   if (data.h === '1') {
     return;
   }
   if (oldBike.date < data.date) {
     await Bike.updateOne({ id: id }, data);
-    //console.log('更新成功');
   } else {
     console.log(oldBike.date);
     console.log(data.date);
