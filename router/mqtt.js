@@ -1,5 +1,4 @@
 const moment = require('moment');
-const WebSocket = require('ws');
 const Mqtt = require('../utils/mqtt.js');
 const Bike = require('../models/bikeModel');
 const Hbike = require('../models/HbikeModel');
@@ -14,43 +13,21 @@ const amount = require('../models/amount.js');
 const cl = require('../models/cl');
 const cf = require('../models/cf');
 
-// 创建 WebSocket 服务器
-const myWebSocketServer = new WebSocket.Server({ port: 8080 });
-// 保存连接的客户端
-const clients = new Set();
-// 处理 WebSocket 连接
-myWebSocketServer.on('connection', con => {
-  // 将连接的客户端添加到集合中
-  clients.add(con);
-
-  // 监听 WebSocket 消息
-  con.on('message', message => {
-    console.log('Received message:', message);
-  });
-
-  // 监听 WebSocket 关闭
-  con.on('close', () => {
-    // 从集合中移除关闭的客户端
-    clients.delete(con);
-  });
-});
-
 let lastConnect = undefined;
 async function sendMessage(w, msg) {
   await Bike.updateOne({ id: '2001' }, { w: w });
-  clients.forEach(client => {
-    console.log(msg);
-    client.send(msg);
-  });
+  //console.log(msg);
 }
 
 setInterval(async () => {
+  //console.log(Date.now() - lastConnect < 3000);
   if (lastConnect === undefined || Date.now() - lastConnect >= 4000) {
     sendMessage('1', 'Hardware connect fail');
   } else if (Date.now() - lastConnect < 3000) {
     sendMessage('0', 'Hardware connect success');
   }
-}, 2000);
+}, 1000);
+
 let mqttclient = new Mqtt({
   url: 'mqtt://localhost:1883',
   theme: [`shdsaveok`, `show`, `cont`],
