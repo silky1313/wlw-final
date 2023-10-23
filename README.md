@@ -6,7 +6,7 @@ https://nodejs.org/en 官网下载LTS版本，我的node本是16.17.1，本项�
 
 ### mongodb的安装和mongodb compass的安装
 mongodb compass是mongodb的图形化管理工具，其实使用datagrip一类的数据图图形化管理工具也可以直接连接mongodb数据库, 这个自己网上搜搜教程就行。本文只讲mongodb compass的安装教程。
-- mongdodb安装直接打开mongodb-windows-x86_64-7.0.2-signed.msi，然后切记不要选择安装compass否则无法自己选择安装路径。![avoid install compass]([../image/avoid instal mongodbCompass.png](https://github.com/silky1313/wlw-final/blob/main/image/avoid%20instal%20mongodbCompass.png)
+- mongdodb安装直接打开mongodb-windows-x86_64-7.0.2-signed.msi，然后切记不要选择安装compass否则无法自己选择安装路径。![avoid install compass](https://github.com/silky1313/wlw-final/blob/main/image/avoid%20instal%20mongodbCompass.png)
 记得自己选择安装目录，然后在安装目录中打开bin/mongod.exe启动服务。
 
 - mongodb compass的安装就直接选择一路默认就行。
