@@ -2,29 +2,29 @@ const mongoose = require('mongoose');
 
 const bikeSchema = new mongoose.Schema({
   id: String,
-  //站台内人数
-  p: String,
   //温度
   t: String,
-  //光线亮度
+  //关照状态
   l: String,
-  //乘车总人数
-  m: String,
-  //风扇状态 00 - 11
-  cf: String,
-  //小灯状态 00 -11
+  //高温阈值
+  hot: String,
+  //是否发生火灾报警
+  rh: String,
+  //小灯状态
   cl: String,
-  //非法时间段
-  dl: String,
-  dr: String,
-  //温度范围
-  tl: String,
-  tr: String,
-  //亮度范围
+  //多久提醒用户自动关灯
+  st: String,
+  //灯提醒位
+  rst: String,
+  //ll lr 关照阈值
   ll: String,
-  lr: String,
-  w: String,
-  date: String
+  //夜晚时间
+  nl: String,
+  nr: String,
+  //硬件系统时间
+  date: String,
+  //app设置时间
+  date2: String
 });
 
 const Bike = mongoose.model('Bike', bikeSchema);

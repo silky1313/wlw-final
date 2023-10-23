@@ -9,17 +9,13 @@ const ejs = require('ejs');
 const moment = require('moment');
 const Hbike = require('../models/HbikeModel');
 const Update = require('../models/updateModel');
-const people = require('../models/people.js');
-const light = require('../models/light');
-const temp = require('../models/temp');
-const cl = require('../models/cl');
-const cf = require('../models/cf');
-const amount = require('../models/amount');
+const Sleep = require('../models/sleep');
 
 const collections = {
   Bike: Bike,
   Hbike: Hbike,
-  Update: Update
+  Update: Update,
+  Sleep: Sleep
 };
 
 /**
@@ -38,8 +34,7 @@ exports.getData = catchAsync(async (req, res, next) => {
   }
 
   if (Model === Hbike) {
-    //查找历史数据建表
-    result = await Model.find({}, { date: 1, p: 1, t: 1 }).sort({ date: -1 });
+    result = await Model.find({}, { date1: 1, m: 1, t: 1 }).sort({ date: -1 });
   } else {
     result = await Model.find();
   }
@@ -52,26 +47,25 @@ exports.getData = catchAsync(async (req, res, next) => {
 });
 
 exports.updateData = catchAsync(async (req, res, next) => {
-  req.query.date = moment()
-    .format('YYYY-MM-DDTHH:mm:ss')
-    .toString();
-  if (req.query.dl) {
-    req.query.dl += '00';
+  //console.log(req.query);
+  // req.query.date = moment()
+  //   .format('YYYY-MM-DDTHH:mm:ss')
+  //   .toString();
+  let result;
+  if (req.query.date2) {
+    result = await Bike.updateOne({ id: '2001' }, { date2: req.query.date2 });
+    req.query.date = req.query.date2;
+  } else if (req.query.rst || req.query.rh || req.query.nl || req.query.nr) {
+    result = await Bike.updateOne({ id: '2001' }, req.query);
   }
-  if (req.query.dr) {
-    req.query.dr += '00';
-  }
-  let result = await Update.create(req.query);
+  result = await Update.create(req.query);
 
-  // if (req.query.r) {
-  //   req.query.r = iconv.convertToGB2312(req.query.r);
-  // }
-  const { date, ...msg } = req.query;
+  const { date2, ...msg } = req.query;
   let cont = {
     status: 'ok',
     data: [msg]
   };
-  console.log(msg);
+  console.log(cont);
   mqttclient.publish('cont', cont);
 
   res.status(200).json({
@@ -84,14 +78,8 @@ exports.updateData = catchAsync(async (req, res, next) => {
 exports.deleteAll = catchAsync(async (req, res, next) => {
   await Hbike.deleteMany();
   await Update.deleteMany();
-  await people.deleteMany();
-  await light.deleteMany();
-  await temp.deleteMany();
-  await cl.deleteMany();
-  await cf.deleteMany();
-  await amount.deleteMany();
+  await Sleep.deleteMany();
 
-  console.log('delete success');
   res.status(200).json({
     code: 204,
     msg: 'success'
